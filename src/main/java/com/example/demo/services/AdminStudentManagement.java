@@ -26,7 +26,7 @@ public class AdminStudentManagement implements StudentManagement {
     private ApplicationEventPublisher applicationEventPublisher;
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
+    private final String PATH_TO_STUDENTS = "D:\\Алексей\\GitHab\\SpringBasics\\Students\\src\\main\\resources\\students.json";
 
     public AdminStudentManagement() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

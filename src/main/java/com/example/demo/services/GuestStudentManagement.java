@@ -1,7 +1,6 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.Student;
-import com.example.demo.event.StudentEvent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -25,7 +24,7 @@ public class GuestStudentManagement implements StudentManagement {
     private ApplicationEventPublisher applicationEventPublisher;
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
+    private final String PATH_TO_STUDENTS = "D:\\Алексей\\GitHab\\SpringBasics\\Students\\src\\main\\resources\\students.json";
 
     public GuestStudentManagement() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
