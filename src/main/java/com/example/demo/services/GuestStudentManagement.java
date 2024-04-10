@@ -12,6 +12,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -24,7 +26,7 @@ public class GuestStudentManagement implements StudentManagement {
     private ApplicationEventPublisher applicationEventPublisher;
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final String PATH_TO_STUDENTS = "D:\\Алексей\\GitHab\\SpringBasics\\Students\\src\\main\\resources\\students.json";
+    private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
 
     public GuestStudentManagement() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -32,6 +34,14 @@ public class GuestStudentManagement implements StudentManagement {
     }
 
     private void readerJSONFile() {
+        if (!Files.exists(Path.of(PATH_TO_STUDENTS))){
+            try {
+                Files.createFile(Path.of(PATH_TO_STUDENTS));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             studentMap =
@@ -41,7 +51,6 @@ public class GuestStudentManagement implements StudentManagement {
         } catch (IOException e) {
             return;
         }
-
     }
 
     @Override

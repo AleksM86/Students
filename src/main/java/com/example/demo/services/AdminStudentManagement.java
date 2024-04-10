@@ -13,6 +13,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -26,7 +28,9 @@ public class AdminStudentManagement implements StudentManagement {
     private ApplicationEventPublisher applicationEventPublisher;
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final String PATH_TO_STUDENTS = "D:\\Алексей\\GitHab\\SpringBasics\\Students\\src\\main\\resources\\students.json";
+    private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
+    //для запуска через Docker
+    //private final String PATH_TO_STUDENTS = "/app/students.json";
 
     public AdminStudentManagement() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -34,6 +38,16 @@ public class AdminStudentManagement implements StudentManagement {
     }
 
     private void readerJSONFile() {
+        if (!Files.exists(Path.of(PATH_TO_STUDENTS))){
+            try {
+                Files.createFile(Path.of(PATH_TO_STUDENTS));
+                System.out.println("создан файл students.json");
+            } catch (IOException e) {
+                System.out.println("файл не создан");
+                e.printStackTrace();
+                return;
+            }
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             studentMap =
@@ -41,6 +55,7 @@ public class AdminStudentManagement implements StudentManagement {
                             new TypeReference<>() {
                             });
         } catch (IOException e) {
+            System.out.println("Не удалось прочитать файл");
             return;
         }
 
@@ -49,6 +64,16 @@ public class AdminStudentManagement implements StudentManagement {
     @Override
     @ShellMethod(key = "show")
     public void showStudents() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            studentMap =
+                    objectMapper.readValue(new File(PATH_TO_STUDENTS),
+                            new TypeReference<>() {
+                            });
+        } catch (IOException e) {
+            System.out.println("Не удалось прочитать файл");
+            return;
+        }
         for (Student student : studentMap.values()) {
             System.out.println(student.toString());
         }
