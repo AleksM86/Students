@@ -27,6 +27,8 @@ public class GuestStudentManagement implements StudentManagement {
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
     private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
+    //для запуска через Docker
+    //private final String PATH_TO_STUDENTS = "/app/students.json";
 
     public GuestStudentManagement() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
