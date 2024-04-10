@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.shell.standard.ShellComponent;
@@ -26,11 +27,10 @@ public class GuestStudentManagement implements StudentManagement {
     private ApplicationEventPublisher applicationEventPublisher;
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
-    //для запуска через Docker
-    //private final String PATH_TO_STUDENTS = "/app/students.json";
+    private final String PATH_TO_STUDENTS;
 
-    public GuestStudentManagement() {
+    public GuestStudentManagement(@Value("${app.path}") String path) {
+        PATH_TO_STUDENTS = path;
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         readerJSONFile();
     }

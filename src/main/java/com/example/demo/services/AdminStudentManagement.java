@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -28,11 +30,10 @@ public class AdminStudentManagement implements StudentManagement {
     private ApplicationEventPublisher applicationEventPublisher;
     private Map<UUID, Student> studentMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final String PATH_TO_STUDENTS = "src/main/resources/students.json";
-    //для запуска через Docker
-    //private final String PATH_TO_STUDENTS = "/app/students.json";
+    private final String PATH_TO_STUDENTS;
 
-    public AdminStudentManagement() {
+    public AdminStudentManagement(@Value("${app.path}") String path) {
+        PATH_TO_STUDENTS = path;
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         readerJSONFile();
     }
@@ -43,7 +44,6 @@ public class AdminStudentManagement implements StudentManagement {
                 Files.createFile(Path.of(PATH_TO_STUDENTS));
                 System.out.println("создан файл students.json");
             } catch (IOException e) {
-                System.out.println("файл не создан");
                 e.printStackTrace();
                 return;
             }
@@ -55,7 +55,6 @@ public class AdminStudentManagement implements StudentManagement {
                             new TypeReference<>() {
                             });
         } catch (IOException e) {
-            System.out.println("Не удалось прочитать файл");
             return;
         }
 

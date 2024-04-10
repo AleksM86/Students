@@ -1,6 +1,7 @@
 #Введите в свойство management значение admin или guest
 app:
-  management: ${param:admin}
+  management: ${param1:admin}
+  path: ${param2:src/main/resources/students.json}
 logging:
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
