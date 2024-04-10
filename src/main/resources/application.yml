@@ -1,6 +1,6 @@
 #Введите в свойство management значение admin или guest
 app:
-  management: admin
+  management: ${param:guest}
 logging:
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
